@@ -25,12 +25,18 @@ app.all('*', function (req, res, next) {
             res.send(500, { error: 'There is no Target-Endpoint header in the request' });
             return;
         }
-        request({ url: targetURL + req.url, method: req.method, json: req.body, headers: req.headers },
+
+        delete req.headers.host;
+
+        var params = { url: targetURL, method: req.method, json: req.body, headers: req.headers };
+        console.log(params);
+
+        request(params,
             function (error, response, body) {
                 if (error) {
                     console.error('error: ' + response.statusCode)
                 }
-//                console.log(body);
+               console.log(body);
             }).pipe(res);
     }
 });
